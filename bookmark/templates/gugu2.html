@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ number }}단</title>
+</head>
+<body>
+    <h1>{{ number }}단</h1>
+    {% for i in numbers %}
+        <h4>{{ number }} * {{ forloop.counter }} = {{ i }}</h4><br>
+    {% endfor %}
+</body>
+</html>
