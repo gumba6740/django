@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from app.to_do_list.models import ToDoList
+from apps.todo_list.models import ToDoList
 
 @admin.register(ToDoList)
 class TodoAdmin(admin.ModelAdmin):

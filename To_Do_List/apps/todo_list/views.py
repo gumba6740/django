@@ -1,6 +1,6 @@
 from django.http import Http404
 from django.shortcuts import render
-from app.to_do_list.models import ToDoList
+from apps.todo_list.models import ToDoList
 
 
 def todo_list(request):
@@ -8,7 +8,7 @@ def todo_list(request):
     context = {
         'todos': todos,
     }
-    return render(request, 'todo_list.html', context=context)
+    return render(request, 'todo_list/todo_list.html', context=context)
 
 
 def todo_info(request, todo_id):
@@ -22,4 +22,4 @@ def todo_info(request, todo_id):
         'todo': todo
     }
 
-    return render(request, 'todo_info.html', context=context)
+    return render(request, 'todo_list/todo_info.html', context=context)
