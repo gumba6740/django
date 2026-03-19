@@ -8,6 +8,9 @@
 
 {% block content %}
     <h1>{{ todo.title }}</h1>
+    <div style="text-align: right;">
+        <a href="{% url 'todos:update_todo' pk=todo.id %}">수정</a>
+    </div>
     <p>할일: {{todo.title}}</p>
     <p>상세: {{ todo.description }}</p>
     <p>수행여부:
