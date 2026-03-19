@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}할 일{% endblock %}
+
+{% block headline %}
+    <a href="{% url 'todos:create_todo' %}">할 일 작성</a>
+{% endblock %}
+
+{% block content %}
+    <h1>할 일 목록</h1>
+    <ul>
+        {% for todo in todos %}
+            <li>
+            <a href="{% url 'todos:todo_info' pk=todo.id %}"
+                style="color: {% if todo.is_completed %}green{% else %}red{% endif %}">
+                {{ todo.title }}: {{ todo.description }}&nbsp;&nbsp;
+            </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+

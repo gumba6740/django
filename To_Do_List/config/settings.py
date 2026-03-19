@@ -40,7 +40,7 @@ DJANGO_APPS = [
 ]
 
 OWNER_APPS = [
-    'apps.todo_list',
+    'apps.todos',
     'apps.users'
 ]
 
@@ -131,6 +131,8 @@ STATIC_URL = 'static/'
 
 
 # about login
-# LOGIN_REDIRECT_URL = '/todos/'
-# LOGOUT_REDIRECT_URL = '/todos/'
-# LOGIN_URL = '/login/'
+from django.urls import reverse_lazy
+
+LOGIN_REDIRECT_URL = reverse_lazy('todos:todo_list')
+LOGOUT_REDIRECT_URL = reverse_lazy('todos:todo_list')
+LOGIN_URL = reverse_lazy('login')
