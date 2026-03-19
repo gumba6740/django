@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name': '할 일',
                 'verbose_name_plural': '할 일 목록',
-                'db_table': 'todo_list',
+                'db_table': 'todos',
             },
         ),
     ]
