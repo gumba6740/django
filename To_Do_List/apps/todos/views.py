@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 
@@ -9,9 +10,15 @@ from apps.todos.forms import ToDoListForm, ToDoUpdateForm
 @login_required
 def todo_list(request):
     todos = ToDoList.objects.filter(author=request.user).order_by('end_date')
+    paginator = Paginator(todos, 10)
+    page = request.GET.get('page')
+    page_obj = paginator.get_page(page)
+
     context = {
         'todos': todos,
+        'page_obj': page_obj,
     }
+
     return render(request, 'todos/todo_list.html', context=context)
 
 
