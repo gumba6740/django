@@ -1,13 +1,14 @@
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_http_methods
+
 from apps.todos.models import ToDoList
 from apps.todos.forms import ToDoListForm, ToDoUpdateForm
 
 
 @login_required
 def todo_list(request):
-    todos = ToDoList.objects.filter(author=request.user)
+    todos = ToDoList.objects.filter(author=request.user).order_by('end_date')
     context = {
         'todos': todos,
     }
@@ -60,3 +61,12 @@ def update_todo(request, pk):
 
     return render(request, 'todos/update_todo.html', context=context)
 
+
+@login_required
+@require_http_methods(['POST'])
+def delete_todo(request, pk):
+
+    todo = get_object_or_404(ToDoList, pk=pk, author=request.user)
+    todo.delete()
+
+    return redirect('todos:todo_list')

@@ -10,6 +10,10 @@
     <h1>{{ todo.title }}</h1>
     <div style="text-align: right;">
         <a href="{% url 'todos:update_todo' pk=todo.id %}">수정</a>
+        <form action="{% url 'todos:delete_todo' pk=todo.id %}" method="POST" style="display: inline">
+            {% csrf_token %}
+            <button>삭제</button>
+        </form>
     </div>
     <p>할일: {{todo.title}}</p>
     <p>상세: {{ todo.description }}</p>

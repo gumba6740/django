@@ -5,9 +5,6 @@ from django.db import models
 User = get_user_model()
 
 class ToDoList(models.Model):
-    CATEGORY_CHOICES = (
-
-    )
 
     title = models.CharField(max_length=50)
     description = models.TextField()

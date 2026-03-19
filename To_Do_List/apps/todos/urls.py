@@ -9,4 +9,5 @@ urlpatterns = [
     path('todos/<int:pk>/', todo_info, name='todo_info'),
     path('todos/create/', create_todo, name='create_todo'),
     path('todos/<int:pk>/update/', update_todo, name='update_todo'),
+    path('todos/<int:pk>/delete/', delete_todo, name='delete_todo'),
 ]
