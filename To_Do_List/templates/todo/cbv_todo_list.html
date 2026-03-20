@@ -13,7 +13,7 @@
             <li style="margin-bottom: 10px">
             <a href="{% url 'cbv_todo:info' pk=todo.pk %}"
                 style="color: {% if todo.is_completed %}green{% else %}red{% endif %}">
-                {{ todo.id }}){{ todo.title }}: {{ todo.description }}&nbsp;&nbsp;
+                ({{ todo.id }}) {{ todo.title }}: {{ todo.description }}&nbsp;&nbsp;
             </a>
             </li>
         {% endfor %}

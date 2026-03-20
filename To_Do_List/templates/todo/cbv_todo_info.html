@@ -7,12 +7,14 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ todo.title }}</h1>
+    <h1 style="display: inline; margin: 10px">{{ todo.title }}</h1>{{ object.author }}
     <div style="text-align: right;">
-        <a href="{% url 'cbv_todo:update' pk=todo.id %}">수정</a>
-        <form action="{% url 'cbv_todo:delete' pk=todo.id %}" method="POST" style="display: inline">
+        {% if request.user == object.author or request.user.is_superuser %}
+            <a href="{% url 'cbv_todo:update' pk=todo.id %}">수정</a>
+        {% endif %}
+        <form id="delete_form" action="{% url 'cbv_todo:delete' pk=todo.id %}" method="POST" style="display: inline">
             {% csrf_token %}
-            <button>삭제</button>
+            <button id="delete_btn" type="button">삭제</button>
         </form>
     </div>
     <p>할일: {{todo.title}}</p>
@@ -28,5 +30,15 @@
     <p>종료날짜: {{ todo.end_date }}</p>
 {% endblock %}
 
+
+{% block js %}
+    <script>
+        document.querySelector('#delete_btn').addEventListener('click', function() {
+            if(confirm('삭제하시겠습니까?')) {
+                document.querySelector('#delete_form').submit();
+            }
+        })
+    </script>
+{% endblock %}
 
 

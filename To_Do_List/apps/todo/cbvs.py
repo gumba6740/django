@@ -15,7 +15,10 @@ class ToDoListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
 
-        queryset = super().get_queryset().filter(author=self.request.user)
+        queryset = super().get_queryset()
+
+        if not self.request.user.is_staff:
+            queryset = queryset.filter(author=self.request.user)
 
         q = self.request.GET.get('q')
         if q:
@@ -34,6 +37,10 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         object = super().get_object()
+
+        if self.request.user.is_staff:
+            return object
+
         if object.author != self.request.user:
             raise Http404()
         return object
@@ -70,6 +77,10 @@ class TodoUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         object = super().get_object()
+
+        if self.request.user.is_superuser:
+            return object
+
         if object.author != self.request.user:
             raise Http404()
         return object
@@ -84,6 +95,10 @@ class TodoDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None):
         object = super().get_object()
+
+        if self.request.user.is_staff:
+            return object
+
         if object.author != self.request.user:
             raise Http404()
         return object
