@@ -7,12 +7,12 @@
 <body>
     <nav>
         <div style="display: flex">
-            <a href="{% url 'todos:todo_list' %}">목록</a>&nbsp;&nbsp;
+            <a href="{% url 'todo:list' %}">목록</a>&nbsp;&nbsp;
             {% block headline %}{% endblock %}
         </div>
         {% block login %}
             <div style="text-align: right">
-                <a href="{% url 'users:signup' %}">회원가입</a>
+                <a href="{% url 'user:signup' %}">회원가입</a>
                 {% if request.user.is_authenticated %}
                     <form action="{% url 'logout' %}" method="POST" style="display: inline;">
                         {% csrf_token %}
