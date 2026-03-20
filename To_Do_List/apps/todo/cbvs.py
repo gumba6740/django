@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from apps.todo.models import ToDoList
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -75,4 +75,18 @@ class TodoUpdateView(LoginRequiredMixin, UpdateView):
         return object
 
     def get_success_url(self):
-        return reverse_lazy('cbv_todo:info', kwargs={'pk': self.object.pk})
+        return reverse_lazy('cbv_todo:info', args=(self.object.pk,))
+
+
+
+class TodoDeleteView(LoginRequiredMixin, DeleteView):
+    model = ToDoList
+
+    def get_object(self, queryset=None):
+        object = super().get_object()
+        if object.author != self.request.user:
+            raise Http404()
+        return object
+
+    def get_success_url(self):
+        return reverse_lazy('cbv_todo:list')
