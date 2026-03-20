@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class ToDoListView(LoginRequiredMixin, ListView):
 
     queryset = ToDoList.objects.all()
-    template_name = 'todo/todo_list.html'
+    template_name = 'todo/cbv_todo_list.html'
     ordering = '-created_at'
     paginate_by = 10
 

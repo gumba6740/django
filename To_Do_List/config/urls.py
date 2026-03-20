@@ -22,4 +22,5 @@ urlpatterns = [
     path('account/', include('django.contrib.auth.urls')),
     path('', include('apps.todo.urls')),
     path('', include('apps.user.urls')),
+    path('', include('apps.todo.cbv_urls')),
 ]
