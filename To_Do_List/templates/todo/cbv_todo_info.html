@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'cbv_base.html' %}
 
 {% block title %}{{ todo.title }}{% endblock %}
 
 {% block headline %}
-    <a href="{% url 'todo:create' %}">할 일 작성</a>
+    <a href="{% url 'cbv_todo:create' %}">할 일 작성</a>
 {% endblock %}
 
 {% block content %}

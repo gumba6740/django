@@ -1,6 +1,7 @@
 from django.db.models import Q
-from django.http import Http404
-from django.views.generic import ListView, DetailView
+from django.http import Http404, HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView
 from apps.todo.models import ToDoList
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -42,3 +43,20 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
         context['todo'] = self.object.__dict__
         print(context['todo'])
         return context
+
+
+class TodoCreateView(LoginRequiredMixin, CreateView):
+    model = ToDoList
+    template_name = 'todo/cbv_create_todo.html'
+    fields = ['title', 'description', 'start_date', 'end_date']
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.save()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse_lazy('cbv_todo:info', kwargs={'pk': self.object.pk})
+
