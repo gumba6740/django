@@ -1,5 +1,6 @@
 from django.db.models import Q
-from django.views.generic import ListView
+from django.http import Http404
+from django.views.generic import ListView, DetailView
 from apps.todo.models import ToDoList
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -13,7 +14,7 @@ class ToDoListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
 
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().filter(author=self.request.user)
 
         q = self.request.GET.get('q')
         if q:
@@ -25,3 +26,19 @@ class ToDoListView(LoginRequiredMixin, ListView):
         return queryset
 
 
+
+class TodoDetailView(LoginRequiredMixin, DetailView):
+    model = ToDoList
+    template_name = 'todo/cbv_todo_info.html'
+
+    def get_object(self, queryset=None):
+        object = super().get_object()
+        if object.author != self.request.user:
+            raise Http404()
+        return object
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['todo'] = self.object.__dict__
+        print(context['todo'])
+        return context

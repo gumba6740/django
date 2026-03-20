@@ -133,6 +133,6 @@ STATIC_URL = 'static/'
 # about login
 from django.urls import reverse_lazy
 
-LOGIN_REDIRECT_URL = reverse_lazy('todo:list')
-LOGOUT_REDIRECT_URL = reverse_lazy('todo:list')
+LOGIN_REDIRECT_URL = '/todos2/'
+LOGOUT_REDIRECT_URL = '/todos2/'
 LOGIN_URL = reverse_lazy('login')
