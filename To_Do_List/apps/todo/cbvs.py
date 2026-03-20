@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from apps.todo.models import ToDoList
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -10,7 +10,7 @@ class ToDoListView(LoginRequiredMixin, ListView):
 
     queryset = ToDoList.objects.all()
     template_name = 'todo/cbv_todo_list.html'
-    ordering = '-created_at'
+    ordering = ['-modified_at', '-created_at']
     paginate_by = 10
 
     def get_queryset(self):
@@ -60,3 +60,19 @@ class TodoCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('cbv_todo:info', kwargs={'pk': self.object.pk})
 
+
+
+class TodoUpdateView(LoginRequiredMixin, UpdateView):
+    model = ToDoList
+    template_name = 'todo/cbv_update_todo.html'
+    fields = ['title', 'description', 'is_completed', 'start_date', 'end_date']
+    context_object_name = 'todo'
+
+    def get_object(self, queryset=None):
+        object = super().get_object()
+        if object.author != self.request.user:
+            raise Http404()
+        return object
+
+    def get_success_url(self):
+        return reverse_lazy('cbv_todo:info', kwargs={'pk': self.object.pk})
