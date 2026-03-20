@@ -1,0 +1,15 @@
+{% extends 'cbv_base.html' %}
+
+{% block title %}할 일 작성{% endblock %}
+
+{% block headline %}{% endblock %}
+
+{% block login %}{% endblock %}
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>작성</button>
+    </form>
+{% endblock %}

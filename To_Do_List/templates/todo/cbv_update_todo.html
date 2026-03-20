@@ -1,15 +1,15 @@
-{% extends 'base.html' %}
+{% extends 'cbv_base.html' %}
 
 {% block title %}할 일 수정{% endblock %}
 
 {% block headline %}
-    <a href="{% url 'todos:todo_info' pk=todo.id %}">{{ todo.title }}</a>
+    <a href="{% url 'cbv_todo:info' pk=todo.pk %}">{{ todo.title }}</a>
 {% endblock %}
 
 {% block login %}{% endblock %}
 
 {% block content %}
-    <form action="{% url 'todos:update_todo' pk=todo.id %}" method="POST">
+    <form action="{% url 'cbv_todo:update' pk=todo.pk %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <button>수정</button>

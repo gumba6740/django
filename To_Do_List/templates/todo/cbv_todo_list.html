@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'cbv_base.html' %}
 
 {% block title %}할 일{% endblock %}
 
 {% block headline %}
-    <a href="{% url 'todos:create_todo' %}">할 일 작성</a>
+    <a href="{% url 'cbv_todo:create' %}">할 일 작성</a>
 {% endblock %}
 
 {% block content %}
@@ -11,14 +11,20 @@
     <ul>
         {% for todo in page_obj %}
             <li style="margin-bottom: 10px">
-            <a href="{% url 'todos:todo_info' pk=todo.id %}"
+            <a href="{% url 'cbv_todo:info' pk=todo.pk %}"
                 style="color: {% if todo.is_completed %}green{% else %}red{% endif %}">
-                {{ todo.id }}){{ todo.title }}: {{ todo.description }}&nbsp;&nbsp;
+                ({{ todo.id }}) {{ todo.title }}: {{ todo.description }}&nbsp;&nbsp;
             </a>
             </li>
         {% endfor %}
     </ul>
     <br>
+
+    <form method="GET" style="margin-bottom: 10px">
+        <input name="q" type="text" placeholder="검색어를 입력하세요" value="{% if request.GET.q %}{{ request.GET.q }}{% endif %}">
+        <button>검색</button>
+    </form>
+
     <div>
         {% if page_obj.has_previous %}
             <a href="?page=1">⏮️</a>&nbsp;

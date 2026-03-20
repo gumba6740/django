@@ -7,7 +7,7 @@
 <body>
     <nav>
         <div style="display: flex">
-            <a href="{% url 'todo:list' %}">목록</a>&nbsp;&nbsp;
+            <a href="{% url 'cbv_todo:list' %}">목록</a>&nbsp;&nbsp;
             {% block headline %}{% endblock %}
         </div>
         {% block login %}
@@ -27,5 +27,6 @@
     </nav>
     <hr>
     {% block content %}{% endblock %}
+    {% block js %}{% endblock %}
 </body>
 </html>
