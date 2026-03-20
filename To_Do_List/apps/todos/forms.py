@@ -8,7 +8,6 @@ class ToDoListForm(ModelForm):
         fields = ['title', 'description', 'start_date', 'end_date']
 
 
-class ToDoUpdateForm(ModelForm):
-    class Meta:
-        model = ToDoList
-        fields = ['title', 'description', 'is_completed', 'start_date', 'end_date']
+class ToDoUpdateForm(ToDoListForm):
+    class Meta(ToDoListForm.Meta):
+        fields = ToDoListForm.Meta.fields + ['is_completed']
