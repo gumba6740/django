@@ -37,6 +37,21 @@
         <p class="ms-2 mt-2">시작날짜: {{ todo.start_date }}</p>
         <p class="ms-2 mt-2">종료날짜: {{ todo.end_date }}</p>
     </div>
+    <br>
+{# 댓글 작성란 #}
+
+
+{# 댓글 목록 #}
+    <h3 class="border-bottom pb-2 mb-3 text-primary">댓글</h3>
+    {% for comment in page_obj %}
+        <p class="fw-bold">{{ comment.user }}</p>
+        <p>{{ comment.message }}</p>
+        <p class="text-end text-muted small">{{ comment.created_at }}</p>
+        <hr>
+    {% endfor %}
+
+{# 페이지네이션 #}
+    {% include 'pagination.html' %}
 {% endblock %}
 
 {# js #}
