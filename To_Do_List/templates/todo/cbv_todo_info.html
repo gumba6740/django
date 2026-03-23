@@ -2,35 +2,44 @@
 
 {% block title %}{{ todo.title }}{% endblock %}
 
+{# 헤드라인: 할 일 작성 #}
 {% block headline %}
-    <a href="{% url 'cbv_todo:create' %}">할 일 작성</a>
+    <a class="text-decoration-none text-white" href="{% url 'cbv_todo:create' %}">작성</a>
 {% endblock %}
 
 {% block content %}
     <h1 style="display: inline; margin: 10px">{{ todo.title }}</h1>{{ object.author }}
-    <div style="text-align: right;">
+
+{# 수정 버튼 #}
+    <div style="text-align: right;" class="mb-2">
         {% if request.user == object.author or request.user.is_superuser %}
-            <a href="{% url 'cbv_todo:update' pk=todo.id %}">수정</a>
+            <a class="btn btn-sm btn-warning" href="{% url 'cbv_todo:update' pk=todo.id %}">수정</a>
         {% endif %}
+
+{# 삭제 버튼 #}
         <form id="delete_form" action="{% url 'cbv_todo:delete' pk=todo.id %}" method="POST" style="display: inline">
             {% csrf_token %}
-            <button id="delete_btn" type="button">삭제</button>
+            <button id="delete_btn" class="delete_btn btn btn-sm btn-danger" type="button">삭제</button>
         </form>
     </div>
-    <p>할일: {{todo.title}}</p>
-    <p>상세: {{ todo.description }}</p>
-    <p>수행여부:
-      {% if todo.is_completed == False %}
-        X
-      {% else %}
-        O
-      {% endif %}
-    </p>
-    <p>시작날짜: {{ todo.start_date }}</p>
-    <p>종료날짜: {{ todo.end_date }}</p>
+
+{# 할 일 상세 정보 #}
+    <div class="card shadow-sm mb-4">
+        <p class="ms-2 mt-2">할일: {{todo.title}}</p>
+        <p class="ms-2 mt-2">상세: {{ todo.description }}</p>
+        <p class="ms-2 mt-2">수행여부:
+            {% if todo.is_completed == False %}
+                 X
+            {% else %}
+                 O
+            {% endif %}
+        </p>
+        <p class="ms-2 mt-2">시작날짜: {{ todo.start_date }}</p>
+        <p class="ms-2 mt-2">종료날짜: {{ todo.end_date }}</p>
+    </div>
 {% endblock %}
 
-
+{# js #}
 {% block js %}
     <script>
         document.querySelector('#delete_btn').addEventListener('click', function() {

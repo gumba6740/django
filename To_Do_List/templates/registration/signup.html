@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'cbv_base.html' %}
 
 {% block title %}회원가입{% endblock %}
 
@@ -9,6 +9,10 @@
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button>회원가입</button>
+        <button class="btn btn-primary">회원가입</button>
     </form>
+{% endblock %}
+
+{% block js %}
+    {% include 'form-js.html' %}
 {% endblock %}

@@ -1,32 +1,48 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Title{% endblock %}</title>
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
 </head>
 <body>
+
+{# 할일 목록, 추가 헤드라인 #}
     <nav>
-        <div style="display: flex">
-            <a href="{% url 'cbv_todo:list' %}">목록</a>&nbsp;&nbsp;
-            {% block headline %}{% endblock %}
-        </div>
-        {% block login %}
-            <div style="text-align: right">
-                <a href="{% url 'user:signup' %}">회원가입</a>
-                {% if request.user.is_authenticated %}
-                    <form action="{% url 'logout' %}" method="POST" style="display: inline;">
-                        {% csrf_token %}
-                        <button>로그아웃</button>
-                    </form>
-                    {{ request.user.username }}
-                {% else %}
-                    <a href="{% url 'login' %}">로그인</a>
-                {% endif %}
+        <div class="d-flex justify-content-between py-3 px-4 bg-black text-white" style="display: flex; justify-content: space-between;">
+            <div>
+                <a class="text-decoration-none text-white me-2" href="{% url 'todo:list' %}">목록</a>
+                {% block headline %}{% endblock %}
             </div>
-        {% endblock %}
+
+{# 로그인, 로그아웃, 회원가입 버튼 #}
+            {% block login %}
+                <div style="text-align: right">
+                    <a class="text-decoration-none text-white me-2" href="{% url 'user:signup' %}">회원가입</a>
+                    {% if request.user.is_authenticated %}
+                        <form action="{% url 'logout' %}" method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <button class="btn btn-danger btn-sm me-2">로그아웃</button>
+                        </form>
+                        {{ request.user.username }}
+                    {% else %}
+                        <a class="text-decoration-none text-white" href="{% url 'login' %}">로그인</a>
+                    {% endif %}
+                </div>
+            {% endblock %}
+        </div>
     </nav>
     <hr>
-    {% block content %}{% endblock %}
+
+{# content 블록 #}
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+{# js #}
+    <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
     {% block js %}{% endblock %}
 </body>
 </html>

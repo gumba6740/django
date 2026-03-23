@@ -3,7 +3,7 @@
 {% block title %}할 일 수정{% endblock %}
 
 {% block headline %}
-    <a href="{% url 'cbv_todo:info' pk=todo.pk %}">{{ todo.title }}</a>
+    <a class="text-decoration-none text-white" href="{% url 'cbv_todo:info' pk=todo.pk %}">이전으로</a>
 {% endblock %}
 
 {% block login %}{% endblock %}

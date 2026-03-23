@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'cbv_base.html' %}
 
 {% block title %}로그인{% endblock %}
 
@@ -8,7 +8,11 @@
     <h1>로그인</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_table }}
-        <button>로그인</button>
+        {{ form.as_p }}
+        <button class="btn btn-primary">로그인</button>
     </form>
+{% endblock %}
+
+{% block js %}
+    {% include 'form-js.html' %}
 {% endblock %}
