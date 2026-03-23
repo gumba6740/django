@@ -14,4 +14,5 @@ urlpatterns = [
 
     # Comment
     path('comments/<int:todo_id>/create/', CommentCreateView.as_view(), name='comment_create'),
+    path('comments/<int:pk>/update/', CommentUpdateView.as_view(), name='comment_update'),
 ]

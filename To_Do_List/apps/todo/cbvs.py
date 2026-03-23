@@ -53,11 +53,20 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
             raise Http404()
         return object
 
+
+
+
 # context에 todo, comment_form 추가
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['todo'] = self.object.__dict__
-        context['comment_form'] = CommentForm()
+        context['comment_create_form'] = CommentForm()
+
+        comment_id = self.request.GET.get('update_cmt')
+        if comment_id:
+            comment = self.object.comments.get(pk=comment_id)
+            context['comment_update_form'] = CommentForm(instance=comment)
+
 
 # 댓글 페이지네이터
         comments = Comment.objects.filter(todo_id=self.object.id)
@@ -143,3 +152,20 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse_lazy('cbv_todo:info', kwargs={'todo_id': self.kwargs['todo_id']})
+
+
+class CommentUpdateView(LoginRequiredMixin, UpdateView):
+    model = Comment
+    fields = ['message',]
+
+    def get_object(self, queryset=None):
+        object = super().get_object()
+        if self.request.user.is_superuser:
+            return object
+        if object.user != self.request.user:
+            raise Http404()
+
+        return object
+
+    def get_success_url(self):
+        return reverse_lazy('cbv_todo:info', kwargs={'todo_id': self.object.todo_id})

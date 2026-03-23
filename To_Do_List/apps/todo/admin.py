@@ -6,7 +6,7 @@ from apps.todo.models import ToDoList, Comment
 admin.site.register(Comment)
 class CommentInline(admin.TabularInline):
     model = Comment
-    fields = ['message', 'user']
+    fields = ['message', 'user', 'todo']
 
 
 @admin.register(ToDoList)

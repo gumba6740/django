@@ -39,22 +39,56 @@
     </div>
     <br>
 {# 댓글 작성란 #}
-    <h3 class="border-bottom pb-2 mb-3 text-primary">댓글</h3>
+    <h3 class="pb-2 mb-3 text-primary">댓글</h3>
     <form action="{% url 'cbv_todo:comment_create' todo_id=todo.id %}" method="post">
         {% csrf_token %}
-        {{ comment_form.as_p }}
+        {{ comment_create_form.as_p }}
         <div class="text-end">
             <button class="btn btn-primary">댓글</button>
         </div>
     </form>
+    <br><hr>
 
 
 {# 댓글 목록 #}
     {% for comment in page_obj %}
-        <p class="fw-bold">{{ comment.user }}</p>
-        <p>{{ comment.message }}</p>
-        <p class="text-end text-muted small">{{ comment.created_at }}</p>
-        <hr>
+    {# 수정 버튼을 누른 경우 #}
+        {% if comment.id|stringformat:"s" == request.GET.update_cmt %}
+
+        {# 작성자 #}
+            <div class="d-flex justify-content-between mb-2">
+                <p class="fw-bold">{{ comment.user }}</p>
+        {# 저장 버튼 #}
+                <button class="btn btn-sm btn-light" type="submit" form="comment_update_form_{{ comment.id }}">저장</button>
+            </div>
+        {# 수정 form #}
+            <form id="comment_update_form_{{ comment.id }}" method="POST" action="{% url 'cbv_todo:comment_update' pk=comment.id %}">
+                {% csrf_token %}
+                {{ comment_update_form.as_p }}
+            </form>
+    {# 댓글 생성 날짜 #}
+            <div class="text-end text-muted small">
+                 <p>{{ comment.created_at }}</p>
+            </div>
+            <hr>
+
+    {# 수정 버튼 안 누른 경우 #}
+        {% else %}
+
+            <div class="d-flex justify-content-between mb-2">
+            {# 작성자 #}
+                <p class="fw-bold">{{ comment.user }}</p>
+            {# 수정 버튼 #}
+                <a class="text-decoration-none text-dark small me-3 text-muted" href="?update_cmt={{ comment.id }}">수정</a>
+            </div>
+            {# 댓글 내용 #}
+            <p>{{ comment.message }}</p>
+            {# 생성 날짜 #}
+            <div class="text-end text-muted small">
+                 <p>{{ comment.created_at }}</p>
+            </div>
+            <hr>
+        {% endif %}
     {% endfor %}
 
 {# 페이지네이션 #}

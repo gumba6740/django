@@ -18,7 +18,7 @@ class CommentForm(ModelForm):
         model = Comment
         fields = ['message',]
         labels = {
-            'message': '댓글',
+            'message': '',
         }
         widgets = {
             'message': TextInput(attrs={'class': 'form-control'}),
