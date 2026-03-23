@@ -17,7 +17,7 @@ class ToDoListView(LoginRequiredMixin, ListView):
 
         queryset = super().get_queryset()
 
-        if not self.request.user.is_staff:
+        if not self.request.user.is_superuser:
             queryset = queryset.filter(author=self.request.user)
 
         q = self.request.GET.get('q')
@@ -38,7 +38,7 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         object = super().get_object()
 
-        if self.request.user.is_staff:
+        if self.request.user.is_superuser:
             return object
 
         if object.author != self.request.user:
@@ -96,7 +96,7 @@ class TodoDeleteView(LoginRequiredMixin, DeleteView):
     def get_object(self, queryset=None):
         object = super().get_object()
 
-        if self.request.user.is_staff:
+        if self.request.user.is_superuser:
             return object
 
         if object.author != self.request.user:
