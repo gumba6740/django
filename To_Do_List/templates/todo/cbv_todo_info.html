@@ -59,14 +59,21 @@
             <div class="d-flex justify-content-between mb-2">
                 <p class="fw-bold">{{ comment.user }}</p>
         {# 저장 버튼 #}
-                <button class="btn btn-sm btn-light" type="submit" form="comment_update_form_{{ comment.id }}">저장</button>
+                <div class="d-flex">
+                    <button class="btn btn-sm btn-light" type="submit" form="comment_update_form_{{ comment.id }}">저장</button>
+        {# 삭제 버튼 #}
+                    <form method="post" action="{% url 'cbv_todo:comment_delete' pk=comment.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-light">삭제</button>
+                    </form>
+                </div>
             </div>
         {# 수정 form #}
             <form id="comment_update_form_{{ comment.id }}" method="POST" action="{% url 'cbv_todo:comment_update' pk=comment.id %}">
                 {% csrf_token %}
                 {{ comment_update_form.as_p }}
             </form>
-    {# 댓글 생성 날짜 #}
+        {# 댓글 생성 날짜 #}
             <div class="text-end text-muted small">
                  <p>{{ comment.created_at }}</p>
             </div>
@@ -79,7 +86,13 @@
             {# 작성자 #}
                 <p class="fw-bold">{{ comment.user }}</p>
             {# 수정 버튼 #}
-                <a class="text-decoration-none text-dark small me-3 text-muted" href="?update_cmt={{ comment.id }}">수정</a>
+                <div class="d-flex">
+                    <a class="text-decoration-none text-dark small me-3 text-muted" href="?page={{ page_obj.number }}&update_cmt={{ comment.id }}">수정</a>
+                    <form method="post" action="{% url 'cbv_todo:comment_delete' pk=comment.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-light">삭제</button>
+                    </form>
+                </div>
             </div>
             {# 댓글 내용 #}
             <p>{{ comment.message }}</p>

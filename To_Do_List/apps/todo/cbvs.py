@@ -53,9 +53,6 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
             raise Http404()
         return object
 
-
-
-
 # context에 todo, comment_form 추가
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -67,9 +64,8 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
             comment = self.object.comments.get(pk=comment_id)
             context['comment_update_form'] = CommentForm(instance=comment)
 
-
 # 댓글 페이지네이터
-        comments = Comment.objects.filter(todo_id=self.object.id)
+        comments = Comment.objects.filter(todo_id=self.object.id).order_by('-created_at')
         paginator = Paginator(comments, 10)
         page = self.request.GET.get('page')
         page_obj = paginator.get_page(page)
@@ -139,7 +135,7 @@ class TodoDeleteView(LoginRequiredMixin, DeleteView):
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     fields = ['message']
-    pk_url_kwarg = 'todo_id'
+    # pk_url_kwarg = 'todo_id'
 
 # self.object에 작성자와 todo 넣고 디비에 저장
     def form_valid(self, form):
@@ -168,4 +164,21 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
         return object
 
     def get_success_url(self):
-        return reverse_lazy('cbv_todo:info', kwargs={'todo_id': self.object.todo_id})
+        page = self.request.GET.get('page')
+        url = reverse_lazy('cbv_todo:info', kwargs={'todo_id': self.object.todo_id})
+        if page:
+            return f'{url}?page={page}'
+        return url
+
+
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Comment
+
+    def get_object(self, queryset=None):
+        object = super().get_object()
+        if object.user != self.request.user and not self.request.user.is_superuser:
+            raise Http404()
+        return object
+
+    def get_success_url(self):
+        return reverse_lazy("cbv_todo:info", kwargs={'todo_id': self.object.todo_id})
