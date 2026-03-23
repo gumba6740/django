@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -39,6 +40,7 @@ class ToDoListView(LoginRequiredMixin, ListView):
 class TodoDetailView(LoginRequiredMixin, DetailView):
     model = ToDoList
     template_name = 'todo/cbv_todo_info.html'
+    pk_url_kwarg = 'todo_id'
 
 # 할일과 작성자 매칭
     def get_object(self, queryset=None):
@@ -81,7 +83,7 @@ class TodoCreateView(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('cbv_todo:info', kwargs={'pk': self.object.pk})
+        return reverse_lazy('cbv_todo:info', kwargs={'todo_id': self.object.pk})
 
 
 class TodoUpdateView(LoginRequiredMixin, UpdateView):
@@ -89,6 +91,7 @@ class TodoUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'todo/cbv_update_todo.html'
     fields = ['title', 'description', 'is_completed', 'start_date', 'end_date']
     context_object_name = 'todo'
+    pk_url_kwarg = 'todo_id'
 
 # 할일과 작성자 매칭
     def get_object(self, queryset=None):
@@ -102,11 +105,12 @@ class TodoUpdateView(LoginRequiredMixin, UpdateView):
         return object
 
     def get_success_url(self):
-        return reverse_lazy('cbv_todo:info', args=(self.object.pk,))
+        return reverse_lazy('cbv_todo:info', kwargs={'todo_id': self.object.pk})
 
 
 class TodoDeleteView(LoginRequiredMixin, DeleteView):
     model = ToDoList
+    pk_url_kwarg = 'todo_id'
 
 # 할일과 작성자 매칭
     def get_object(self, queryset=None):
@@ -121,3 +125,21 @@ class TodoDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('cbv_todo:list')
+
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    fields = ['message']
+    pk_url_kwarg = 'todo_id'
+
+# self.object에 작성자와 todo 넣고 디비에 저장
+    def form_valid(self, form):
+        todo = get_object_or_404(ToDoList, pk=self.kwargs['todo_id'])
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.todo = todo
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse_lazy('cbv_todo:info', kwargs={'todo_id': self.kwargs['todo_id']})

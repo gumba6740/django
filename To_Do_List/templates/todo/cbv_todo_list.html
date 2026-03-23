@@ -20,7 +20,7 @@
     <ul>
         {% for todo in page_obj %}
             <li style="margin-bottom: 10px">
-                <a href=" {% url 'cbv_todo:info' pk=todo.id %}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                <a href=" {% url 'cbv_todo:info' todo_id=todo.id %}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
                     ({{ todo.id }}){{ todo.title }}<span>({{ todo.author.username }})</span> - {{ todo.created_at | date:"Y-m-d" }}
                 </a>
             </li>

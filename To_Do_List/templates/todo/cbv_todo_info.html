@@ -13,11 +13,11 @@
 {# 수정 버튼 #}
     <div style="text-align: right;" class="mb-2">
         {% if request.user == object.author or request.user.is_superuser %}
-            <a class="btn btn-sm btn-warning" href="{% url 'cbv_todo:update' pk=todo.id %}">수정</a>
+            <a class="btn btn-sm btn-warning" href="{% url 'cbv_todo:update' todo_id=todo.id %}">수정</a>
         {% endif %}
 
 {# 삭제 버튼 #}
-        <form id="delete_form" action="{% url 'cbv_todo:delete' pk=todo.id %}" method="POST" style="display: inline">
+        <form id="delete_form" action="{% url 'cbv_todo:delete' todo_id=todo.id %}" method="POST" style="display: inline">
             {% csrf_token %}
             <button id="delete_btn" class="delete_btn btn btn-sm btn-danger" type="button">삭제</button>
         </form>
@@ -39,10 +39,17 @@
     </div>
     <br>
 {# 댓글 작성란 #}
+    <h3 class="border-bottom pb-2 mb-3 text-primary">댓글</h3>
+    <form action="{% url 'cbv_todo:comment_create' todo_id=todo.id %}" method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <div class="text-end">
+            <button class="btn btn-primary">댓글</button>
+        </div>
+    </form>
 
 
 {# 댓글 목록 #}
-    <h3 class="border-bottom pb-2 mb-3 text-primary">댓글</h3>
     {% for comment in page_obj %}
         <p class="fw-bold">{{ comment.user }}</p>
         <p>{{ comment.message }}</p>
