@@ -10,6 +10,10 @@
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button>작성</button>
+        <button class="btn btn-sm btn-primary">작성</button>
     </form>
+{% endblock %}
+
+{% block js %}
+    {% include 'form-js.html' %}
 {% endblock %}
