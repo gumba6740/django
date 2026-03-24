@@ -1,10 +1,10 @@
 from django.forms import ModelForm, TextInput
-from apps.todo.models import ToDoList, Comment
+from apps.todo.models import ToDo, Comment
 
 
 class ToDoListForm(ModelForm):
     class Meta:
-        model = ToDoList
+        model = ToDo
         fields = ['title', 'description', 'start_date', 'end_date']
 
 

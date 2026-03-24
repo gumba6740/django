@@ -6,15 +6,15 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from apps.todo.forms import CommentForm
-from apps.todo.models import ToDoList, Comment
+from apps.todo.models import ToDo, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class ToDoListView(LoginRequiredMixin, ListView):
 
-    queryset = ToDoList.objects.all()
+    queryset = ToDo.objects.all()
     template_name = 'todo/cbv_todo_list.html'
-    ordering = ['-modified_at', '-created_at']
+    ordering = ['-updated_at', '-created_at']
     paginate_by = 10
 
     def get_queryset(self):
@@ -23,7 +23,7 @@ class ToDoListView(LoginRequiredMixin, ListView):
         queryset = super().get_queryset()
     # 어드민 권한
         if not self.request.user.is_superuser:
-            queryset = queryset.filter(author=self.request.user)
+            queryset = queryset.filter(user=self.request.user)
 
 # 검색 기능
         q = self.request.GET.get('q')
@@ -38,20 +38,20 @@ class ToDoListView(LoginRequiredMixin, ListView):
 
 
 class TodoDetailView(LoginRequiredMixin, DetailView):
-    model = ToDoList
+    queryset = ToDo.objects.select_related('user').prefetch_related('comments', 'comments__user')
     template_name = 'todo/cbv_todo_info.html'
     pk_url_kwarg = 'todo_id'
 
 # 할일과 작성자 매칭
     def get_object(self, queryset=None):
-        object = super().get_object()
+        obj = super().get_object()
     # 어드민 권한
         if self.request.user.is_superuser:
-            return object
+            return obj
 
-        if object.author != self.request.user:
+        if obj.user != self.request.user:
             raise Http404()
-        return object
+        return obj
 
 # context에 todo, comment_form 추가
     def get_context_data(self, **kwargs):
@@ -75,14 +75,14 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
 
 
 class TodoCreateView(LoginRequiredMixin, CreateView):
-    model = ToDoList
+    model = ToDo
     template_name = 'todo/cbv_create_todo.html'
     fields = ['title', 'description', 'start_date', 'end_date']
 
 # form을 받아서 작성자 추가 및 디비에 저장
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.author = self.request.user
+        self.object.user = self.request.user
         self.object.save()
 
         return HttpResponseRedirect(self.get_success_url())
@@ -92,7 +92,7 @@ class TodoCreateView(LoginRequiredMixin, CreateView):
 
 
 class TodoUpdateView(LoginRequiredMixin, UpdateView):
-    model = ToDoList
+    model = ToDo
     template_name = 'todo/cbv_update_todo.html'
     fields = ['title', 'description', 'is_completed', 'start_date', 'end_date']
     context_object_name = 'todo'
@@ -100,33 +100,33 @@ class TodoUpdateView(LoginRequiredMixin, UpdateView):
 
 # 할일과 작성자 매칭
     def get_object(self, queryset=None):
-        object = super().get_object()
+        obj = super().get_object()
     # 어드민 권한
         if self.request.user.is_superuser:
-            return object
+            return obj
 
-        if object.author != self.request.user:
+        if obj.user != self.request.user:
             raise Http404()
-        return object
+        return obj
 
     def get_success_url(self):
         return reverse_lazy('cbv_todo:info', kwargs={'todo_id': self.object.pk})
 
 
 class TodoDeleteView(LoginRequiredMixin, DeleteView):
-    model = ToDoList
+    model = ToDo
     pk_url_kwarg = 'todo_id'
 
 # 할일과 작성자 매칭
     def get_object(self, queryset=None):
-        object = super().get_object()
+        obj = super().get_object()
     # 어드민 권한
         if self.request.user.is_superuser:
-            return object
+            return obj
 
-        if object.author != self.request.user:
+        if obj.user != self.request.user:
             raise Http404()
-        return object
+        return obj
 
     def get_success_url(self):
         return reverse_lazy('cbv_todo:list')
@@ -139,7 +139,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
 # self.object에 작성자와 todo 넣고 디비에 저장
     def form_valid(self, form):
-        todo = get_object_or_404(ToDoList, pk=self.kwargs['todo_id'])
+        todo = get_object_or_404(ToDo, pk=self.kwargs['todo_id'])
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.todo = todo
@@ -155,13 +155,13 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
     fields = ['message',]
 
     def get_object(self, queryset=None):
-        object = super().get_object()
+        obj = super().get_object()
         if self.request.user.is_superuser:
-            return object
-        if object.user != self.request.user:
+            return obj
+        if obj.user != self.request.user:
             raise Http404()
 
-        return object
+        return obj
 
     def get_success_url(self):
         page = self.request.GET.get('page')
@@ -175,10 +175,10 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
     model = Comment
 
     def get_object(self, queryset=None):
-        object = super().get_object()
-        if object.user != self.request.user and not self.request.user.is_superuser:
+        obj = super().get_object()
+        if obj.user != self.request.user and not self.request.user.is_superuser:
             raise Http404()
-        return object
+        return obj
 
     def get_success_url(self):
-        return reverse_lazy("cbv_todo:info", kwargs={'todo_id': self.object.todo_id})
+        return reverse_lazy('cbv_todo:list')
