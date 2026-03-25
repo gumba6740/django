@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from apps.todo.forms import CommentForm
+from apps.todo.forms import CommentForm, ToDoForm, ToDoUpdateForm
 from apps.todo.models import ToDo, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -77,7 +77,7 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
 class TodoCreateView(LoginRequiredMixin, CreateView):
     model = ToDo
     template_name = 'todo/cbv_create_todo.html'
-    fields = ['title', 'description', 'start_date', 'end_date']
+    form_class = ToDoForm
 
 # form을 받아서 작성자 추가 및 디비에 저장
     def form_valid(self, form):
@@ -94,8 +94,7 @@ class TodoCreateView(LoginRequiredMixin, CreateView):
 class TodoUpdateView(LoginRequiredMixin, UpdateView):
     model = ToDo
     template_name = 'todo/cbv_update_todo.html'
-    fields = ['title', 'description', 'is_completed', 'start_date', 'end_date']
-    context_object_name = 'todo'
+    form_class = ToDoUpdateForm
     pk_url_kwarg = 'todo_id'
 
 # 할일과 작성자 매칭

@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 
 from apps.todo.models import ToDo
-from apps.todo.forms import ToDoListForm, ToDoUpdateForm
+from apps.todo.forms import ToDoForm, ToDoUpdateForm
 
 
 @login_required
@@ -44,7 +44,7 @@ def todo_info(request, pk):
 @login_required
 def create_todo(request):
 
-    form = ToDoListForm(request.POST or None)
+    form = ToDoForm(request.POST or None)
     if form.is_valid():
         todo = form.save(commit=False)
         todo.user = request.user
