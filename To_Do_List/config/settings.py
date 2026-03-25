@@ -47,6 +47,7 @@ OWNER_APPS = [
 THIRD_PARTY_APPS = [
     'django_extensions',
     'django_summernote',
+    'django_cleanup',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + OWNER_APPS + THIRD_PARTY_APPS
@@ -149,3 +150,28 @@ from django.urls import reverse_lazy
 LOGIN_REDIRECT_URL = '/cbv/todos/'
 LOGOUT_REDIRECT_URL = '/cbv/todos/'
 LOGIN_URL = reverse_lazy('login')
+
+
+# summernote
+
+SUMMERNOTE_CONFIG = {
+    'iframe': True,
+    'summernote': {
+        'airMode': False,
+        'width': '100%',
+        'height': '450',
+        'lang': 'ko-KR',
+        'toolbar': [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear', 'fontsize']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', ]],
+            ['view', ['fullscreen', 'help', ]],
+        ],
+    },
+    'disable_attachment': False,
+    'attachment_absolute_uri': True,
+}

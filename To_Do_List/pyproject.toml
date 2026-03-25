@@ -11,6 +11,8 @@ django = "^6.0.3"
 django-extensions = "^4.1"
 ipython = "^9.11.0"
 django-summernote = "^0.8.20.0"
+django-cleanup = "^9.0.0"
+pillow = "^12.1.1"
 
 
 [build-system]

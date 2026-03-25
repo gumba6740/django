@@ -20,6 +20,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('django.contrib.auth.urls')),
+    path('summernote/', include('django_summernote.urls')),
     path('', include('apps.todo.urls')),
     path('', include('apps.user.urls')),
     path('cbv/', include('apps.todo.cbv_urls')),
