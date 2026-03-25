@@ -11,6 +11,8 @@ class ToDo(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     is_completed = models.BooleanField(default=False)
+    image = models.ImageField(upload_to='todo/%Y/%m/%d', blank=True, null=True)
+    thumbnail = models.ImageField(upload_to='todo/%Y/%m/%d/thumbnail', default="default/todo_default.png", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
