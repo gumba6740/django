@@ -8,11 +8,11 @@
 {% endblock %}
 
 {% block content %}
-    <h1 style="display: inline; margin: 10px">{{ todo.title }}</h1>{{ object.author }}
+    <h1 style="display: inline; margin: 10px">{{ todo.title }}</h1>{{ object.user }}
 
 {# 수정 버튼 #}
     <div style="text-align: right;" class="mb-2">
-        {% if request.user == object.author or request.user.is_superuser %}
+        {% if request.user == object.user or request.user.is_superuser %}
             <a class="btn btn-sm btn-warning" href="{% url 'cbv_todo:update' todo_id=todo.id %}">수정</a>
         {% endif %}
 
@@ -25,8 +25,11 @@
 
 {# 할 일 상세 정보 #}
     <div class="card shadow-sm mb-4">
+        {% if todo.image %}
+            <img src="{{ todo.image.url }}">
+        {% endif %}
         <p class="ms-2 mt-2">할일: {{todo.title}}</p>
-        <p class="ms-2 mt-2">상세: {{ todo.description }}</p>
+        <p class="ms-2 mt-2">상세: {{ todo.description | safe }}</p>
         <p class="ms-2 mt-2">수행여부:
             {% if todo.is_completed == False %}
                  X

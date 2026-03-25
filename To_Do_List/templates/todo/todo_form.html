@@ -3,16 +3,19 @@
 {% block title %}할 일 수정{% endblock %}
 
 {% block headline %}
-    <a class="text-decoration-none text-white" href="{% url 'cbv_todo:info' todo_id=todo.pk %}">이전으로</a>
+    {% if sub_title == '수정' %}
+        <a class="text-decoration-none text-white" href="{% url 'cbv_todo:info' todo_id=todo.pk %}">이전으로</a>
+    {% endif %}
 {% endblock %}
 
 {% block login %}{% endblock %}
 
 {% block content %}
-    <form action="{% url 'cbv_todo:update' todo_id=todo.pk %}" method="POST" enctype="multipart/form-data">
+    <h2>{{ sub_title }}</h2>
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button>수정</button>
+        <button>{{ btn_name }}</button>
     </form>
 {% endblock %}
 

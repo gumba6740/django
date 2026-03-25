@@ -1,5 +1,5 @@
 <script>
-  document.querySelectorAll('select, input, textarea').forEach(function(ele) {
+document.querySelectorAll('select, input:not([type="checkbox"]), textarea').forEach(function(ele) {
     ele.classList.add('form-control');
-  })
+})
 </script>

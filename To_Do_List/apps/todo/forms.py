@@ -1,16 +1,21 @@
 from django.forms import ModelForm, TextInput
-from apps.todo.models import ToDoList, Comment
+from django_summernote.widgets import SummernoteWidget
+
+from apps.todo.models import ToDo, Comment
 
 
-class ToDoListForm(ModelForm):
+class ToDoForm(ModelForm):
     class Meta:
-        model = ToDoList
-        fields = ['title', 'description', 'start_date', 'end_date']
+        model = ToDo
+        fields = ['title', 'description', 'start_date', 'end_date', 'image']
+        widgets = {
+            'description': SummernoteWidget(),
+        }
 
 
-class ToDoUpdateForm(ToDoListForm):
-    class Meta(ToDoListForm.Meta):
-        fields = ToDoListForm.Meta.fields + ['is_completed']
+class ToDoUpdateForm(ToDoForm):
+    class Meta(ToDoForm.Meta):
+        fields = ToDoForm.Meta.fields + ['is_completed']
 
 
 class CommentForm(ModelForm):
