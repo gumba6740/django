@@ -76,7 +76,7 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
 
 class TodoCreateView(LoginRequiredMixin, CreateView):
     model = ToDo
-    template_name = 'todo/cbv_create_todo.html'
+    template_name = 'todo/todo_form.html'
     form_class = ToDoForm
 
 # form을 받아서 작성자 추가 및 디비에 저장
@@ -87,13 +87,21 @@ class TodoCreateView(LoginRequiredMixin, CreateView):
 
         return HttpResponseRedirect(self.get_success_url())
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sub_title'] = '할 일 작성'
+        context['btn_name'] = '생성'
+
+        return context
+
+
     def get_success_url(self):
         return reverse_lazy('cbv_todo:info', kwargs={'todo_id': self.object.pk})
 
 
 class TodoUpdateView(LoginRequiredMixin, UpdateView):
     model = ToDo
-    template_name = 'todo/cbv_update_todo.html'
+    template_name = 'todo/todo_form.html'
     form_class = ToDoUpdateForm
     pk_url_kwarg = 'todo_id'
 
@@ -107,6 +115,13 @@ class TodoUpdateView(LoginRequiredMixin, UpdateView):
         if obj.user != self.request.user:
             raise Http404()
         return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sub_title'] = '수정'
+        context['btn_name'] = '저장'
+
+        return context
 
     def get_success_url(self):
         return reverse_lazy('cbv_todo:info', kwargs={'todo_id': self.object.pk})

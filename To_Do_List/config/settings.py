@@ -174,4 +174,5 @@ SUMMERNOTE_CONFIG = {
     },
     'disable_attachment': False,
     'attachment_absolute_uri': True,
+    'attachment_filesize_limit': 5 * 1024 * 1024,
 }
