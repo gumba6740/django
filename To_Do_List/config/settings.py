@@ -30,6 +30,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# USER
+AUTH_USER_MODEL = 'user.User'
+
 # Application definition
 
 DJANGO_APPS = [
@@ -41,7 +44,7 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
-OWNER_APPS = [
+OWN_APPS = [
     'apps.todo',
     'apps.user'
 ]
@@ -52,7 +55,7 @@ THIRD_PARTY_APPS = [
     'django_cleanup',
 ]
 
-INSTALLED_APPS = DJANGO_APPS + OWNER_APPS + THIRD_PARTY_APPS
+INSTALLED_APPS = OWN_APPS + DJANGO_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
