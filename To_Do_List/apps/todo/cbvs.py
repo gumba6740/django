@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -38,7 +38,10 @@ class ToDoListView(LoginRequiredMixin, ListView):
 
 
 class TodoDetailView(LoginRequiredMixin, DetailView):
-    queryset = ToDo.objects.select_related('user').prefetch_related('comments', 'comments__user')
+    queryset = ToDo.objects.select_related('user').prefetch_related(
+        Prefetch('comments',
+                 queryset=Comment.objects.order_by('-created_at').select_related('user'))
+    )
     template_name = 'todo/cbv_todo_info.html'
     pk_url_kwarg = 'todo_id'
 
@@ -56,7 +59,7 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
 # context에 todo, comment_form 추가
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['todo'] = self.object.__dict__
+        context['todo'] = self.object
         context['comment_create_form'] = CommentForm()
 
         comment_id = self.request.GET.get('update_cmt')
@@ -65,7 +68,7 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
             context['comment_update_form'] = CommentForm(instance=comment)
 
 # 댓글 페이지네이터
-        comments = Comment.objects.filter(todo_id=self.object.id).order_by('-created_at')
+        comments = self.object.comments.all()
         paginator = Paginator(comments, 10)
         page = self.request.GET.get('page')
         page_obj = paginator.get_page(page)

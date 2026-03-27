@@ -1,0 +1,13 @@
+{% extends 'cbv_base.html' %}
+
+{% block login %}{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="text-center">
+            <h1 class="mb-5">이메일 인증</h1>
+            <p>{{ user.email }}로 전송된 링크를 클릭하여 이메일 인증을 완료해주세요.</p>
+            <p class="text-danger">이메일 인증이 완료되지 않으면 로그인 할 수 없습니다.</p>
+        </div>
+    </div>
+{% endblock %}
