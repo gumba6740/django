@@ -150,11 +150,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # about login
-from django.urls import reverse_lazy
 
 LOGIN_REDIRECT_URL = '/cbv/todos/'
 LOGOUT_REDIRECT_URL = '/cbv/todos/'
-LOGIN_URL = reverse_lazy('login')
+LOGIN_URL = '/cbv/login'
 
 
 # summernote

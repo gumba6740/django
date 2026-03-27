@@ -20,7 +20,7 @@
 {# 로그인, 로그아웃, 회원가입 버튼 #}
             {% block login %}
                 <div style="text-align: right">
-                    <a class="text-decoration-none text-white me-2" href="{% url 'user:signup' %}">회원가입</a>
+                    <a class="text-decoration-none text-white me-2" href="{% url 'cbv_user:signup' %}">회원가입</a>
                     {% if request.user.is_authenticated %}
                         <form action="{% url 'logout' %}" method="POST" class="d-inline">
                             {% csrf_token %}
@@ -28,7 +28,7 @@
                         </form>
                         {{ request.user.username }}
                     {% else %}
-                        <a class="text-decoration-none text-white" href="{% url 'login' %}">로그인</a>
+                        <a class="text-decoration-none text-white" href="{% url 'cbv_user:login' %}">로그인</a>
                     {% endif %}
                 </div>
             {% endblock %}
