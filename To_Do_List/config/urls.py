@@ -21,9 +21,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('account/', include('django.contrib.auth.urls')),
     path('summernote/', include('django_summernote.urls')),
     path('', include('apps.todo.urls')),
     path('', include('apps.user.urls')),
     path('cbv/', include('apps.todo.cbv_urls')),
+    path('account/', include('django.contrib.auth.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
