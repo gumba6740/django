@@ -25,5 +25,6 @@ urlpatterns = [
     path('', include('apps.todo.urls')),
     path('', include('apps.user.urls')),
     path('cbv/', include('apps.todo.cbv_urls')),
+    path('cbv/', include('apps.user.cbv_urls')),
     path('account/', include('django.contrib.auth.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
