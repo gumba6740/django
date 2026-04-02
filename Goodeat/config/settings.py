@@ -31,9 +31,17 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+AUTH_USER_MODEL = 'users.User'
+
 # Application definition
 
-INSTALLED_APPS = [
+MY_APPS = [
+    'restaurants',
+    'reviews',
+    'users',
+]
+
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +49,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+THIRD_PARTY_APPS = [
+    'django_extensions',
+]
+
+
+INSTALLED_APPS = MY_APPS + DJANGO_APPS + THIRD_PARTY_APPS
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -77,8 +94,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': SECRET['DB']['DB'],
+        'USER': SECRET['DB']['USER'],
+        'PASSWORD': SECRET['DB']['PASSWORD'],
+        'HOST': SECRET['DB']['HOST'],
+        'PORT': SECRET['DB']['PORT'],
     }
 }
 
@@ -118,3 +139,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_DIRS = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / '.static_root'
+
+
+# MEDIA
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

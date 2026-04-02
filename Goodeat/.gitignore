@@ -10,7 +10,8 @@ media/
 db.sqlite*
 .idea/
 secret.json
-
+.python-version
+poetry.toml
 
 # Virtual environments
 .venv
