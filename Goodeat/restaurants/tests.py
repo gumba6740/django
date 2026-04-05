@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
@@ -46,6 +47,10 @@ class RestaurantViewTestCase(APITestCase):
             "regular_holiday": "MON"
         }
 
+        self.user = get_user_model().objects.create_user(email='test@example.com', password='password1234')
+        self.client.login(email='test@example.com', password='password1234')
+
+
     def test_restaurant_list_view(self):
         url = reverse('restaurant-list')
         Restaurant.objects.create(**self.restaurant_info)
@@ -72,6 +77,7 @@ class RestaurantViewTestCase(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Restaurant.objects.count(), 1)
         self.assertEqual(Restaurant.objects.first().name, self.restaurant_info['name'])
+
 
     def test_restaurant_detail_view(self):
         restaurant = Restaurant.objects.create(**self.restaurant_info)
