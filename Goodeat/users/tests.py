@@ -5,6 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from restaurants.models import Restaurant
 
 User = get_user_model()
 
@@ -85,6 +86,8 @@ class UserAPITestCase(APITestCase):
     def test_before_user_login(self):
         response = self.client.post(reverse('restaurant-list'), self.restaurant_info, format='json')
         self.assertEqual(response.status_code, 403)
+        self.assertEqual(Restaurant.objects.count(), 0)
+
 
     def test_user_login(self):
         user = User.objects.create_user(**self.data)
@@ -101,6 +104,9 @@ class UserAPITestCase(APITestCase):
 
         response = self.client.post(reverse('restaurant-list'), self.restaurant_info, format='json')
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(Restaurant.objects.count(), 1)
+
+
 
     def test_user_logout(self):
         user = User.objects.create_user(**self.data)
@@ -111,6 +117,7 @@ class UserAPITestCase(APITestCase):
 
         response = self.client.post(reverse('restaurant-list'), self.restaurant_info, format='json')
         self.assertEqual(response.status_code, 403)
+        self.assertEqual(Restaurant.objects.count(), 0)
 
 
     def test_user_login_invalid_credentials(self):
@@ -120,6 +127,7 @@ class UserAPITestCase(APITestCase):
         }
         response = self.client.post(reverse('user-login'), data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
     def test_get_user_details(self):
         user = User.objects.create_user(**self.data)
